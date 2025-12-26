@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth.store'
-import { useUserStore, type User } from '../stores/user.store'
+import { authService, userService, type User } from '../store-module'
 
 const router = useRouter()
-const authStore = useAuthStore()
-const userStore = useUserStore()
 
 // Reading State
-const currentUser = computed(() => userStore.profile)
+const currentUser = computed(() => userService.getCurrentUser())
 
 // Edit form state
 const editForm = ref({
@@ -29,7 +26,7 @@ watch(
   { immediate: true }
 )
 
-// Store Actions
+// Service Actions
 const saveProfile = () => {
   if (currentUser.value) {
     const updatedUser: User = {
@@ -37,19 +34,23 @@ const saveProfile = () => {
       name: editForm.value.name,
       email: editForm.value.email,
     }
-    userStore.setUser(updatedUser)
-    alert('Profile updated!')
+    userService.setUser(updatedUser)
+    alert('Profile updated successfully!')
   }
 }
 
 const handleLogout = () => {
-  authStore.logout()
-  userStore.clearUser()
+  authService.logout()
+  userService.clearUser()
   router.push('/login')
 }
 
 const goToDashboard = () => {
   router.push('/dashboard')
+}
+
+const goToProfile = () => {
+  router.push('/profile')
 }
 </script>
 
@@ -60,6 +61,7 @@ const goToDashboard = () => {
       <h1>Profile</h1>
       <div class="header-actions">
         <button @click="goToDashboard" class="btn-outline">Dashboard</button>
+        <button @click="goToProfile" class="btn-outline">Profile</button>
         <button @click="handleLogout" class="btn-outline">Logout</button>
       </div>
     </header>

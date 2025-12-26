@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth.store'
-import { useUserStore, type User } from '../stores/user.store'
+import { authService, userService, type User } from '../store-module'
 
 const router = useRouter()
-const authStore = useAuthStore()
-const userStore = useUserStore()
 
 // Login form data
 const loginForm = ref({
@@ -14,20 +11,20 @@ const loginForm = ref({
   password: 'password123',
 })
 
-// Login handler - Demo Pinia Actions
+// Login handler - Demo Service Layer
 const handleLogin = () => {
-  // Set auth store state
+  // Use auth service for login
   const mockToken = 'mock-jwt-token-' + Date.now()
   const mockRoles = ['user', 'admin']
-  authStore.login(mockToken, mockRoles)
+  authService.login(mockToken, mockRoles)
 
-  // Set user store state
+  // Use user service to set user data
   const mockUser: User = {
     id: '1',
     name: 'Demo User',
     email: loginForm.value.email,
   }
-  userStore.setUser(mockUser)
+  userService.setUser(mockUser)
 
   router.push('/dashboard')
 }

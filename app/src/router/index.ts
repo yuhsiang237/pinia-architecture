@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '../stores/auth.store'
+import { authService } from '../store-module'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,8 +31,8 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const isAuthenticated = authStore.isLoggedIn
+  // Use auth service to check authentication
+  const isAuthenticated = authService.isAuthenticated()
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
