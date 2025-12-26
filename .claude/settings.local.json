@@ -4,7 +4,9 @@
       "Bash(rm:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(npm run test:unit:*)",
+      "Bash(npm run type-check:*)"
     ]
   }
 }

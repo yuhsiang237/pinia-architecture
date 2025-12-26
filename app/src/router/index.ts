@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authService } from '../store-module'
+import { useAuthService } from '../store-module/composables/useAuthService'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +31,9 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
+  // Get singleton auth service instance
+  const authService = useAuthService()
+
   // Use auth service to check authentication
   const isAuthenticated = authService.isAuthenticated()
 

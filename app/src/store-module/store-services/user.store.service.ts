@@ -1,10 +1,12 @@
 import { useUserStore } from '../stores/user.store'
 import type { User } from '../interfaces/user.interface'
+import type { UserStoreType } from '../interfaces/user-store.interface'
 
 export class UserService {
-  // Use getter for lazy initialization to avoid calling before Pinia is initialized
-  private get userStore() {
-    return useUserStore()
+  private userStore: UserStoreType
+
+  constructor(userStore?: UserStoreType) {
+    this.userStore = userStore ?? useUserStore()
   }
 
   // Set user data
@@ -53,5 +55,3 @@ export class UserService {
   }
 }
 
-// Export singleton instance
-export const userService = new UserService()
