@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService, userService, type User } from '../store-module'
+import { useAuthService, useUserService, type User } from '../store-module'
 
 const router = useRouter()
+
+// Get singleton service instances
+const authService = useAuthService()
+const userService = useUserService()
 
 // Reading State
 const currentUser = computed(() => userService.getCurrentUser())
