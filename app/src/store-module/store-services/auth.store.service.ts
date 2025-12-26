@@ -1,9 +1,11 @@
 import { useAuthStore } from '../stores/auth.store'
+import type { AuthStoreType } from '../interfaces/auth-store.interface'
 
 export class AuthService {
-  // Use getter for lazy initialization to avoid calling before Pinia is initialized
-  private get authStore() {
-    return useAuthStore()
+  private authStore: AuthStoreType
+
+  constructor(authStore?: AuthStoreType) {
+    this.authStore = authStore ?? useAuthStore()
   }
 
   // Login
@@ -37,5 +39,3 @@ export class AuthService {
   }
 }
 
-// Export singleton instance
-export const authService = new AuthService()
