@@ -1,33 +1,30 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth.store'
-import { useUserStore, type User } from '../stores/user.store'
+import { authService, userService } from '../store-module'
 
 const router = useRouter()
-const authStore = useAuthStore()
-const userStore = useUserStore()
 
-// Reading State from Stores
-const currentUser = computed(() => userStore.profile)
-const authToken = computed(() => authStore.token)
-const userRoles = computed(() => authStore.roles)
+// Reading State from Services
+const currentUser = computed(() => userService.getCurrentUser())
+const authToken = computed(() => authService.getToken())
+const userRoles = computed(() => authService.getRoles())
+const isLoggedIn = computed(() => authService.isAuthenticated())
 
-// Store Actions
+// Service Actions
 const handleLogout = () => {
-  authStore.logout()
-  userStore.clearUser()
+  authService.logout()
+  userService.clearUser()
   router.push('/login')
 }
 
 const updateUserName = () => {
-  if (currentUser.value) {
-    const updatedUser: User = {
-      ...currentUser.value,
-      name: 'Updated User - ' + Date.now(),
-    }
-    userStore.setUser(updatedUser)
-  }
+  const newName = 'Updated User - ' + Date.now()
+  userService.updateUserName(newName)
+}
+
+const goToDashboard = () => {
+  router.push('/dashboard')
 }
 
 const goToProfile = () => {
@@ -41,6 +38,7 @@ const goToProfile = () => {
     <header class="header">
       <h1>Dashboard</h1>
       <div class="header-actions">
+        <button @click="goToDashboard" class="btn-outline">Dashboard</button>
         <button @click="goToProfile" class="btn-outline">Profile</button>
         <button @click="handleLogout" class="btn-outline">Logout</button>
       </div>
@@ -89,7 +87,7 @@ const goToProfile = () => {
             </div>
             <div class="data-row">
               <span class="label">Logged In:</span>
-              <span class="value">{{ authStore.isLoggedIn ? 'Yes' : 'No' }}</span>
+              <span class="value">{{ isLoggedIn ? 'Yes' : 'No' }}</span>
             </div>
           </div>
         </div>
